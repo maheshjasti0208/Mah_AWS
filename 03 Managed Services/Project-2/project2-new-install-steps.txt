@@ -1,0 +1,32 @@
+EC2 App setup steps.
+
+Run following commands on the EC2 app instance after successful SSH.
+
+	sudo apt update
+	sudo apt install python-pip -y
+	python -m pip install --upgrade pip setuptools
+	sudo apt install virtualenv -y
+	virtualenv ~/.virtualenvs/djangodev
+	source ~/.virtualenvs/djangodev/bin/activate
+	pip install django
+	pip install boto3
+
+Create directory and copy source code
+	sudo chown ubuntu:ubuntu -R /opt
+	cd /opt/
+	COPY the source file directory from local laptop to cloud ubuntu using the below command
+	scp -i <pem> -r ./docproc ubuntu@<ip>:/opt/
+	cd docproc/
+	ls -al
+	python manage.py runserver 0:8080
+
+	Endpoint
+	http://<host>:8080/sns
+
+
+Points to consider
+	In /docproc/api/views.py update the dynamodb region name and s3_target_bucket
+	You also need to make sure port 8080 is opened on EC2
+	Before configuring subscription you need to make sure EC2 program is up and running.
+	Once subscription is configured, on EC2 console log you will get to see the subscription verification url, use this URL on browser to confirm subscription
+	This program uses S3 and DynamoDB make sure proper IAM roles are assigned to the EC2 instance

@@ -1,0 +1,17 @@
+import boto3
+
+def lambda_handler(event, context):
+    # TODO implement
+    s3 = boto3.client("s3")
+    if event:
+        print("Event: ", event)
+        file_obj=event["Records"][0]
+        filename = str(file_obj['s3']['object']['key'])
+        Bucket_nm = str(file_obj['s3']['bucket']['name'])
+        print("Filename is: ", filename)
+        fileobj = s3.get_object(Bucket = Bucket_nm, Key =filename)
+        print("Fileobj details are ",fileobj)
+        file_content = fileobj["Body"].read().decode('utf-8')
+        print("File contents are :",file_content)
+  
+    return ('Completed')
